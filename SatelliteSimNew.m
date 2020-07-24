@@ -1,5 +1,5 @@
 % (c) Kristian Asti, July 2020
-% For simulating a satellite system with two Euler-Bernoulli beams
+% For simulating a felxible satellite with two Euler-Bernoulli beams
 % representing the solar panels and a rigid center body connecting them.
 
 %% PARAMETERS AND MATRICES
@@ -67,7 +67,6 @@ KK1 = (sinh(k1) + sin(k1))/(cosh(k1) + cos(k1));
 % original initial condition is defined on [-1, 0], then substitute
 % x -> x - 1 for the variable.
 x1L_0 = @(x) 0*x;
-%x2L_0 = @(x) 0.1*k1^2*(sinh(k1*x)-sin(k1*x) - KK1*(cosh(k1*x)-cos(k1*x)));
 x2L_0 = @(x) 0.1*(12*(x-1).^2 + 24*(x-1) + 12);
 
 % Initial profile of the left solar panel
@@ -77,8 +76,6 @@ wL_0_fun = @(x) 0.1*((x-1).^4 + 4*(x-1).^3 + 6*(x-1).^2);
 % for our solvers is [0, 1]. If your original initial condition is defined
 % on [0, 1], no need to change anything.
 x1R_0 = @(x) 0*x;
-% x2R_0 = @(x) 0.1*k1^2*(sinh(k1*(1-x))-sin(k1*(1-x)) - ...
-%                 KK1*(cosh(k1*(1-x))-cos(k1*(1-x))));
 x2R_0 = @(x) 0.1*(12*x.^2 - 24*x + 12);
 
 % Initial profile of the right solar panel
@@ -145,7 +142,6 @@ x2c_sol_plot = x2c_sol;
 figure
 plot(t_plot,x1c_sol_plot,'LineWidth',2)
 xlabel('Time [s]','FontSize',14)
-%title(['Number of basis functions used N = ' num2str(N)],'FontSize',16)
 grid on
 hold on
 
@@ -163,14 +159,10 @@ xinodes_R = 0:0.01:1;
 
 phi1_L_matrix = zeros(length(xinodes_R),N);
 phi1_R_matrix = zeros(length(xinodes_R),N);
-% phi2_L_matrix = zeros(length(xinodes_R),N);
-% phi2_R_matrix = zeros(length(xinodes_R),N);
 
 for ii = 1:N
     phi1_L_matrix(:,ii) = polyval(phi1_funs_L{ii},xinodes_R);
     phi1_R_matrix(:,ii) = polyval(phi1_funs_R{ii},xinodes_R);
-%     phi2_L_matrix(:,ii) = polyval(phi2_funs_L{ii},xinodes_R);
-%     phi2_R_matrix(:,ii) = polyval(phi2_funs_R{ii},xinodes_R);
 end
 
 wL_0 = wL_0_fun(xinodes_R);

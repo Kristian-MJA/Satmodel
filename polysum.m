@@ -1,4 +1,4 @@
-% (c) Kristian Asti 2020
+% (c) Kristian Asti, July 2020
 function psum = polysum(varargin)
 %polysum(P1,P2,...,PN) - returns the sum of N polynomials P1, P2, ... ,PN,
 % represented as coefficient (row) vectors compatible with polyval,

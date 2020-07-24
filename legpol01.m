@@ -1,8 +1,7 @@
-% (c) Kristian Asti 2020
+% (c) Kristian Asti, July 2020
 function coeffs = legpol01(n)
 %LEGPOL01(n) - returns the coefficients of the nth Legendre polynomial
-% on the interval [0, 1]. For Legendre polynomials on the interval [-1, 1],
-% use legpol.
+% on the interval [0, 1].
 
 coeffs = zeros(1,n+1);
 

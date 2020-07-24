@@ -1,4 +1,4 @@
-% (c) Kristian Asti 2020
+% (c) Kristian Asti, July 2020
 function ak = basis_appr_01(fun,phifuns)
 %basis_appr(fun,phifuns) - returns the coefficients a_k for a basis
 % function approximation. If phi_k, k = 0,...,N-1, are the basis functions,
@@ -8,9 +8,9 @@ function ak = basis_appr_01(fun,phifuns)
 % approximate coefficients by solving a linear system obtained by computing
 % values of f at N evenly spaced points on (0,1). This is numerically more
 % stable than computing definite integral numerically.
-
+%
 % fun: function handle with a single argument, defined on [0,1].
-
+%
 % phifuns: cell array containing the basis functions defined on [0,1].
 
 N = length(phifuns);

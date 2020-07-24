@@ -24,9 +24,7 @@ phi2dd = @(k) polyder(polyder(phi2(k)));
 % Right end basis, phi1(1) = phi1'(1) = 0    
 phi1 = @(k) polysum(legpol01(k),-(2*k+3)/(k+2)*legpol01(k+1),...
                     (k+1)/(k+2)*legpol01(k+2));
-        
-%phi1d = @(k) polyder(phi1(k));
-%phi1dd = @(k) polyder(polyder(phi1(k)));
+
 
 % Boundary control basis functions at xi = 1
 % phi1_u11 = phi1(N-2); % Standard basis function N-2

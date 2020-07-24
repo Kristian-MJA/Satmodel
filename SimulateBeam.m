@@ -27,7 +27,6 @@ KK1 = (sinh(k1) + sin(k1))/(cosh(k1) + cos(k1));
 % for our solvers is [0, 1]. If your original initial condition is defined
 % on [0, 1], no need to change anything.
 x1_0 = @(x) 0*x;
-%x2_0 = @(x) 0.1*k1^2*(-sin(k1*x)-sinh(k1*x)+KK1*(cosh(k1*x)+cos(k1*x)));
 x2_0 = @(x) 0.1*(12*x.^2 - 24*x + 12);
 
 % Initial conditions in terms of the basis function coefficients
@@ -40,7 +39,7 @@ x_beam_0 = [alpha_0; beta_0];
 Kmat = [1 0; 0 1];  % Input adjustment matrix
 
 u1 = @(t) 0*t;
-u2 = @(t) -sin(2*pi*t); %0*t;
+u2 = @(t) 0*t; %-sin(2*pi*t);
 u = @(t) [u1(t); u2(t)];
 
 u_beam = @(t) Kmat*u(t);
@@ -48,7 +47,7 @@ u_beam = @(t) Kmat*u(t);
 %% SIMULATION PART
 % Time span in seconds [t_0 t_end]
 %tspan = [0 20];
-tspan = 0:0.1:20;
+tspan = 0:0.002:20;
 options = odeset('Mass',M);
 [t, x_beam] = ode15s(@(t, x_beam) K*x_beam + B*u_beam(t), ...
                     tspan, x_beam_0, options);
@@ -61,7 +60,6 @@ for ii = 1:N
 end
 
 % Solving for the deflection of the beam using trapezoidal rule
-%w0_fun = @(x) 0.1*(sin(k1*x)-sinh(k1*x)+KK1*(cosh(k1*x)-cos(k1*x)));
 w0_fun = @(x) 0.1*(x.^4 - 4*x.^3 + 6*x.^2);
 w_beam_0 = w0_fun(xinodes);
 
@@ -76,17 +74,15 @@ w_beam = 1/(rho*a)*phi1_matrix*alpha_int + w_beam_0.';
 
 %% SURFACE PLOT
 
-[T,XI] = meshgrid(t(1:1:end),xinodes);
-surf(T,XI,w_beam(:,1:1:end))
+surfstep = 80; % Timestep for graphing the surface
+
+[T,XI] = meshgrid(t(1:surfstep:end),xinodes);
+surf(T,XI,w_beam(:,1:surfstep:end))
 grid off
 
 xlabel('$t$','Interpreter','latex','FontSize',16)
 ylabel('$\xi$','Interpreter','latex','FontSize',16)
 zlabel('$w(\xi,t)$','Interpreter','latex','FontSize',16)
-% title([num2str(N) ' basis functions, boundary input $\rho a\frac{\partial w}{\partial\xi \partial t}(0,t) = -0.1\sin(2\pi t)$'],...
-%         'Interpreter','latex','FontSize',16)
-% title([num2str(N) ' basis functions, boundary input $\frac{1}{\rho a}\frac{\partial w}{\partial\xi \partial t}(0,t) \equiv 0$'],...
-%         'Interpreter','latex','FontSize',16)
 
 
 %% ANIMATION

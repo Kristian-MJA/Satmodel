@@ -8,26 +8,6 @@ function [M,K,B,C,phi1_funs,phi2_funs] = BeamSimSingle(gamma,E,I,rho,a,N)
 % With constant zero inputs, this corresponds to a cantilevered beam
 % clamped at xi = 0.
 
-if nargin < 6
-    N = 10;
-end
-
-if nargin < 5
-    a = 1;
-end
-
-if nargin < 4
-    rho = 1;
-end
-
-if nargin < 3
-    I = 1;
-end
-
-if nargin < 2
-    E = 1;
-end
-
 
 % Left end basis, phi2(0) = phi2'(0) = 0
 phi2 = @(k) polysum(legpol01(k),-(2*k+3)/(k+2)*legpol01(k+1),...
@@ -39,9 +19,7 @@ phi2dd = @(k) polyder(polyder(phi2(k)));
 % Right end basis, phi1(1) = phi1'(1) = 0    
 phi1 = @(k) polysum(legpol01(k),(2*k+3)/(k+2)*legpol01(k+1),...
                     (k+1)/(k+2)*legpol01(k+2));
-        
-%phi1d = @(k) polyder(phi1(k));
-%phi1dd = @(k) polyder(polyder(phi1(k)));
+
 
 % Boundary control basis functions at xi = 0
 % phi1_u11 = phi1(N-2); % Standard basis function N-2
@@ -56,7 +34,7 @@ phi1_u12 = [1.5 -1 0];
 ip_w = @(p1,p2) max(abs(p1))*max(abs(p2)) * integral(@(x) ...
             polyval(p1/max(abs(p1)),x).*polyval(p2/max(abs(p2)),x),...
             0,1,'RelTol',0,'AbsTol',1e-14);
-% ip_w = @(p,q) ip_L2(p,q);
+
 
 M_alpha = zeros(N);
 M_beta = zeros(N);
@@ -77,7 +55,7 @@ phi2_funs = cell(N,1);
 
 for k = 0:N-1
     for m = 0:N-1
-        % Basis and test functions corresponding to xi = 1
+        % Basis and test functions corresponding to xi = 0
         
         if k == N - 1
             phi_k1 = phi1_u12;
@@ -95,7 +73,7 @@ for k = 0:N-1
             psi_m1 = phi1(m);
         end
             
-        % Basis and test functions corresponding to xi = 0
+        % Basis and test functions corresponding to xi = 1
         phi_k2 = phi2(k);
         phid_k2 = phi2d(k);
         phidd_k2 = phi2dd(k);
